@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_CONNECTION}
+
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+
+jwt:
+  expiration: 30000
+  secret: "RfUjXn2r5u8x/A?D(G+KaPdSgVkYp3s6"
