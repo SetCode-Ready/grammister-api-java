@@ -2,10 +2,14 @@ package set.code.ready.grammisterapi.services;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import set.code.ready.grammisterapi.model.Role;
 import set.code.ready.grammisterapi.model.User;
+import set.code.ready.grammisterapi.model.UserDetailsImpl;
 import set.code.ready.grammisterapi.model.enumeration.RoleEnum;
 import set.code.ready.grammisterapi.model.json.UserRequest;
 import org.springframework.stereotype.Service;
@@ -13,9 +17,7 @@ import set.code.ready.grammisterapi.repository.RoleRepository;
 import set.code.ready.grammisterapi.repository.UserRepository;
 
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service("UserService")
 @AllArgsConstructor
@@ -46,6 +48,8 @@ public class UserService {
                 .gender(userRequest.getGender())
                 .email(userRequest.getEmail())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
+                .createdAt(new Date().toString())
+                .updatedAt(new Date().toString())
                 .build();
 
         Set<String> strRoles = userRequest.getRoles();
@@ -74,5 +78,56 @@ public class UserService {
         newUser.setRoles(roles);
 
         return userRepository.save(newUser);
+    }
+
+    public String followUser(String userId) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        if (userDetails.getId().equals(userId)) {
+            throw new Exception("You can't follow yourself!");
+        }
+
+        Optional<User> currentUserFound = userRepository.findById(userDetails.getId());
+        Optional<User> userToFollowFound = userRepository.findById(userId);
+
+        if (!currentUserFound.isPresent() && !userToFollowFound.isPresent()) {
+            throw new Exception("User(s) not found.");
+        }
+
+        try {
+            User currentUser = currentUserFound.get();
+            User userToFollow = userToFollowFound.get();
+
+            List<User> currentUserFollowings = new ArrayList<>(currentUser.getFollowing());
+            List<User> userToFollowFollowers = new ArrayList<>(userToFollow.getFollowers());
+
+            Boolean userIsFollowed = currentUserFollowings.stream()
+                    .filter(user -> user.getId().equals(userToFollow.getId())).count() > 0;
+
+            if (!userIsFollowed) {
+                currentUserFollowings.add(userToFollow);
+                currentUser.setFollowing(currentUserFollowings);
+
+                userToFollowFollowers.add(currentUser);
+                userToFollow.setFollowers(userToFollowFollowers);
+
+                userRepository.saveAll(Arrays.asList(currentUser, userToFollow));
+
+                return "You are following the user: " + userToFollow.getUsername();
+            } else {
+                currentUserFollowings.removeIf(user -> user.getId().equals(userToFollow.getId()));
+                currentUser.setFollowing(currentUserFollowings);
+
+                userToFollowFollowers.removeIf(user -> user.getId().equals(currentUser.getId()));
+                userToFollow.setFollowers(userToFollowFollowers);
+
+                userRepository.saveAll(Arrays.asList(currentUser, userToFollow));
+
+                return "You unfollowed the user: " + userToFollow.getUsername();
+            }
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 }
