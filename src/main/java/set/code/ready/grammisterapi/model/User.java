@@ -1,5 +1,6 @@
 package set.code.ready.grammisterapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,13 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Builder
@@ -33,11 +29,16 @@ public class User {
 
     private String email;
 
+    @JsonIgnore
     private String password;
 
-    private List followers;
+    @DBRef
+    @Builder.Default
+    private List<User> followers = new ArrayList<>();
 
-    private List following;
+    @DBRef
+    @Builder.Default
+    private List<User> following = new ArrayList<>();
 
     private String createdAt;
 
