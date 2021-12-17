@@ -33,7 +33,7 @@ public class TokenService {
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(exp)
-                .signWith(SignatureAlgorithm.HS256, secret).compact();
+                .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     public boolean isTokenValid(String token) {
@@ -41,6 +41,7 @@ public class TokenService {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
