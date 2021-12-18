@@ -8,5 +8,5 @@ spring:
 
 
 jwt:
-  expiration: 3000000
-  secret: "RfUjXn2r5u8x/A?D(G+KaPdSgVkYp3s6"
+  expiration: ${JWT_EXPIRATION}
+  secret: ${JWT_SECRET}
