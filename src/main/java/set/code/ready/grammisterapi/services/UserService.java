@@ -1,9 +1,6 @@
 package set.code.ready.grammisterapi.services;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,10 +13,9 @@ import org.springframework.stereotype.Service;
 import set.code.ready.grammisterapi.repository.RoleRepository;
 import set.code.ready.grammisterapi.repository.UserRepository;
 
-import java.sql.Timestamp;
 import java.util.*;
 
-@Service("UserService")
+@Service
 @AllArgsConstructor
 public class UserService {
 

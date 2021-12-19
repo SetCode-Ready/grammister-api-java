@@ -62,7 +62,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(new TokenAuthenticationFilter(userDetailsService, tokenService), UsernamePasswordAuthenticationFilter.class);
     }
 
-
     @Override
-    public   void configure(WebSecurity webSecurity) throws Exception {}
+    public void configure(WebSecurity webSecurity) throws Exception {}
 }

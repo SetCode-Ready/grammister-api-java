@@ -3,11 +3,9 @@ package set.code.ready.grammisterapi.services;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import set.code.ready.grammisterapi.model.User;
 import set.code.ready.grammisterapi.model.UserDetailsImpl;
 
 import java.util.Date;

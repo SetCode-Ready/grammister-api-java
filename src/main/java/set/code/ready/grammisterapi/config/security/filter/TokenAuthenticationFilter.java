@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import set.code.ready.grammisterapi.repository.UserRepository;
 import set.code.ready.grammisterapi.services.TokenService;
 
 import javax.servlet.FilterChain;
