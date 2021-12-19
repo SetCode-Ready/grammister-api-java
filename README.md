@@ -14,3 +14,6 @@ o padrão REST.
  - [MongoDB](https://www.mongodb.com/)
  - [Java JWT](https://github.com/jwtk/jjwt)
 
+## Vídeo para demonstração e resoluções
+
+Link: https://www.youtube.com/watch?v=bjguFLnDoTk
